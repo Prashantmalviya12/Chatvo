@@ -2,7 +2,6 @@ type ApiResponseType = {
     statusCode: number;
     data: any;
     message?: string;
-    success?: boolean;
 };
 
 const ApiResponse = ({ statusCode, data, message = "Success" }: ApiResponseType) => {

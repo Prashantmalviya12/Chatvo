@@ -6,8 +6,8 @@ type apiErrorType = {
 };
 
 export const ApiError = ({
+    message = "Something Went Wrong",
   statusCode,
-  message = "Something Went Wrong",
   errors = [],
   data = null,
 }: apiErrorType) => {
