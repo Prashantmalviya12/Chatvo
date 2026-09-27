@@ -4,5 +4,6 @@ import { verifyToken } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 router.get("/auth/me", verifyToken, authController.me);
+router.get("/auth/callback", authController.callBack);
 
 export default router
