@@ -75,16 +75,26 @@ export const chatController = {
         chat = await newChat.populate("participants", "name email avatar");
       }
 
-      const otherParticipants = chat.participants.find((p: any) => p._id.toString() !== userId);
+      const otherParticipants = chat.participants.find(
+        (p: any) => p._id.toString() !== userId,
+      );
       const result = {
-      _id: chat._id,
-      participant: otherParticipants ?? null,
-      lastMessage: chat.lastMessage,
-      lastMessageAt: chat.lastMessageTime,
-      createdAt: chat.createdAt,
-    }
+        _id: chat._id,
+        participant: otherParticipants ?? null,
+        lastMessage: chat.lastMessage,
+        lastMessageAt: chat.lastMessageTime,
+        createdAt: chat.createdAt,
+      };
 
-    return res.status(200).json(ApiResponse({statusCode:200,message:"Chats Successfully",data:result}))
+      return res
+        .status(200)
+        .json(
+          ApiResponse({
+            statusCode: 200,
+            message: "Chats Successfully",
+            data: result,
+          }),
+        );
     } catch (error) {
       console.log("get or create chat error:", error);
       throw ApiError({ statusCode: 500, message: "Internal Server Error" });
