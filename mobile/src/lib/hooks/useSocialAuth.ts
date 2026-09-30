@@ -19,6 +19,7 @@ function useSocialAuth() {
         );
         return;
       }
+      // console.log("createdSessionId", createdSessionId);
       await setActive({ session: createdSessionId });
     } catch (error) {
       console.log("💥 Error in social auth:", error);

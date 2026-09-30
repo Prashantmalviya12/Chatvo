@@ -7,6 +7,6 @@ const router = Router();
 router.use(verifyToken)
 
 router.get("/getChats",chatController.getAllChats)
-router.get("/getChat/:participantId",chatController.getAllChats)
+router.post("/getChat/:participantId",chatController.getOrCreateChats)
 
 export default router

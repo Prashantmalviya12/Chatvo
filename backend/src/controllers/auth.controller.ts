@@ -5,6 +5,7 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/apiErrors.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { clerkClient, getAuth } from "@clerk/express";
+import mongoose from "mongoose";
 // import { ApiResponse } from "../utils/apiResponse.js";/
 
 export const authController = {
@@ -27,15 +28,18 @@ export const authController = {
 
   callBack: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { userId: clerkId } = getAuth(req);
+      const { userId:clerkId } = getAuth(req);
+      // console.log("ClerkId:", clerkId);
+      // return;
       if (!clerkId) {
         throw ApiError({ statusCode: 404, message: "Unauthorized" });
-        return;
+        // return;
       }
 
-      let user = await User.findOne({ clerkId });
+      let user = await User.findOne({clerkId});
       if (!user) {
         const clerkUser = await clerkClient.users.getUser(clerkId);
+        
 
         user = await User.create({
           clerkId,
@@ -55,8 +59,8 @@ export const authController = {
         }),
       );
     } catch (error) {
-      res.status(500);
-      next(error);
+      console.log("Internal server error in calback:",error)
+      throw ApiError({statusCode:500})
     }
   },
 };
