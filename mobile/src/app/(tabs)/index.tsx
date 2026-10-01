@@ -4,15 +4,11 @@ import { useGetChats } from "@/lib/hooks/useChat";
 import { ChatlistModel } from "@/lib/types/chat.types";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useRouter } from "expo-router";
-import {
-  FlatList,
-  Pressable,
-  Text,
-  View
-} from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 
 const ChatTabs = () => {
   const { data, isLoading, error, refetch } = useGetChats();
+  // console.log("chat data", data);
 
   // if (isLoading) {
   //   return (
@@ -39,11 +35,12 @@ const ChatTabs = () => {
   }
 
   const handleChatPress = (chat: ChatlistModel) => {
+    // console.log("chat--", chat);
     router.push({
       pathname: "/chat/[id]",
       params: {
         id: chat._id,
-        participantId: chat.participant,
+        // participantId: chat.participant,
         name: chat.participant.name,
         avatar: chat.participant.avatar,
       },
@@ -52,7 +49,7 @@ const ChatTabs = () => {
   return (
     <View className="flex-1 bg-surface">
       <FlatList
-        data={data}
+        data={data.data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ChatItem chatData={item} onpress={() => handleChatPress(item)} />
@@ -91,7 +88,7 @@ function Header() {
         <Text className="text-2xl font-bold text-foreground">Chats</Text>
         <Pressable
           className="size-10 bg-primary rounded-full items-center justify-center"
-          // onPress={() => router.push("/new-chat")}
+          onPress={() => router.push("/new-chat")}
         >
           <Ionicons name="create-outline" size={20} color="#0D0D0F" />
         </Pressable>

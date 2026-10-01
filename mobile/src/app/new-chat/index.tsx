@@ -1,14 +1,57 @@
+import UserItem from "@/components/userItem";
+import { useGetorCreateChat } from "@/lib/hooks/useChat";
+import { useGetUsers } from "@/lib/hooks/useUser";
+import { userModel } from "@/lib/types/auth.types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useState } from "react";
 import {
+  ActivityIndicator,
   Pressable,
+  ScrollView,
   Text,
   TextInput,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const NewChatScreen = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const { data: getUsers, isLoading: userLoading } = useGetUsers();
+  // console.log("user list", getUsers?.data);
+  const { mutate: getOrCreateChatMutation, isPending: isCreatingChatLoading } =
+    useGetorCreateChat();
+
+  const users = getUsers?.data.filter((u) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      u.name?.toLowerCase().includes(query) ||
+      u.email?.toLowerCase().includes(query)
+    );
+  });
+
+  const handleUserSelect = (user: userModel) => {
+    getOrCreateChatMutation(user._id, {
+      onSuccess: (chat) => {
+        // console.log("chat-->", chat);
+        // router.dismiss(); //-1
+        // setTimeout(() => {
+        //   router.push({
+        //     pathname: "/chat/[id]",
+        //     params: {
+        //       id: chat._id,
+        //       // participantId: chat.participant,
+        //       name: chat.participant.name,
+        //       avatar: chat.participant.avatar,
+        //     },
+        //   });
+        // }, 100);
+      },
+    });
+  };
+
   return (
     <SafeAreaView className="flex-1" edges={["top"]}>
       <View className="flex-1 justify-end">
@@ -38,19 +81,23 @@ const NewChatScreen = () => {
                 placeholderTextColor="#6B6B70"
                 className="flex-1 text-forehead text-sm"
                 autoCapitalize="none"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
               />
             </View>
           </View>
 
-          {/* <View className="flex-1 bg-surface">
-            {isCreatingChat || isLoading ? (
+          <View className="flex-1 bg-surface">
+            {isCreatingChatLoading || userLoading ? (
               <View className="flex-1 items-center justify-center">
                 <ActivityIndicator size="large" color="#F4A261" />
               </View>
             ) : !users || users.length === 0 ? (
               <View className="flex-1 items-center justify-center px-5">
                 <Ionicons name="person-outline" size={64} color="#6B6B70" />
-                <Text className="text-muted-foreground text-lg mt-4">No users found</Text>
+                <Text className="text-muted-foreground text-lg mt-4">
+                  No users found
+                </Text>
                 <Text className="text-subtle-foreground text-sm mt-1 text-center">
                   Try a different search term
                 </Text>
@@ -61,18 +108,20 @@ const NewChatScreen = () => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 24 }}
               >
-                <Text className="text-muted-foreground text-xs mb-3">USERS</Text>
+                <Text className="text-muted-foreground text-xs mb-3">
+                  USERS
+                </Text>
                 {users.map((user) => (
                   <UserItem
                     key={user._id}
                     user={user}
-                    isOnline={onlineUsers.has(user._id)}
+                    isOnline={false}
                     onPress={() => handleUserSelect(user)}
                   />
                 ))}
               </ScrollView>
             )}
-          </View> */}
+          </View>
         </View>
       </View>
     </SafeAreaView>
