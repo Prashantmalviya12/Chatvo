@@ -7,7 +7,7 @@ export const useGetChats = () => {
     queryKey: ["chats"],
     queryFn: async () => {
       const res = await apiclient.get("/api/getChats");
-      console.log("Get chats list:", res.data);
+      // console.log("Get chats list:", res.data);
       return res.data;
     },
   });
@@ -20,6 +20,7 @@ export const useGetorCreateChat = () => {
   return useMutation({
     mutationFn: async (participantId: string) => {
       const res = await apiclient.post(`/api/getChat/${participantId}`);
+      // console.log("response chat create", res.data);
       return res.data;
     },
     onSuccess: () => {

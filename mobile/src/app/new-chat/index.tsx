@@ -35,19 +35,20 @@ const NewChatScreen = () => {
   const handleUserSelect = (user: userModel) => {
     getOrCreateChatMutation(user._id, {
       onSuccess: (chat) => {
-        // console.log("chat-->", chat);
-        // router.dismiss(); //-1
-        // setTimeout(() => {
-        //   router.push({
-        //     pathname: "/chat/[id]",
-        //     params: {
-        //       id: chat._id,
-        //       // participantId: chat.participant,
-        //       name: chat.participant.name,
-        //       avatar: chat.participant.avatar,
-        //     },
-        //   });
-        // }, 100);
+        // console.log("chat-->", chat.data);
+        router.dismiss(); //-1
+        setTimeout(() => {
+          router.push({
+            pathname: "/chat/[id]",
+            params: {
+              id: chat.data._id,
+              participantId: chat.data.participant._id,
+              name: chat.data.participant.name,
+              email: chat.data.participant.email,
+              avatar: chat.data.participant.avatar,
+            },
+          });
+        }, 100);
       },
     });
   };

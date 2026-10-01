@@ -8,7 +8,7 @@ export const useGetUsers = () => {
     queryKey: ["users"],
     queryFn: async () => {
       const res = await apiclient.get<userResponse>("/api/userlist");
-      console.log("User list rresponse:", res.data);
+      // console.log("User list rresponse:", res.data);
       return res.data;
     },
   });

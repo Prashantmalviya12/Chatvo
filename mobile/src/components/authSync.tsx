@@ -29,6 +29,7 @@ export default function AuthSync() {
 
       mutate(undefined, {
         onSuccess: (data: any) => {
+          // console.log("auth", data);
           console.log("✅ User synced with backend:", data.data.name);
         },
         onError: (error) => {

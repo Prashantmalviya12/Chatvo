@@ -8,7 +8,7 @@ import { FlatList, Pressable, Text, View } from "react-native";
 
 const ChatTabs = () => {
   const { data, isLoading, error, refetch } = useGetChats();
-  // console.log("chat data", data);
+  // console.log("chat data", data.data);
 
   // if (isLoading) {
   //   return (
@@ -35,21 +35,21 @@ const ChatTabs = () => {
   }
 
   const handleChatPress = (chat: ChatlistModel) => {
-    // console.log("chat--", chat);
-    router.push({
-      pathname: "/chat/[id]",
-      params: {
-        id: chat._id,
-        // participantId: chat.participant,
-        name: chat.participant.name,
-        avatar: chat.participant.avatar,
-      },
-    });
+    console.log("chat--", chat);
+    // router.push({
+    //   pathname: "/chat/[id]",
+    //   params: {
+    //     id: chat._id,
+    //     // participantId: chat.participant,
+    //     name: chat.participant.name,
+    //     avatar: chat.participant.avatar,
+    //   },
+    // });
   };
   return (
     <View className="flex-1 bg-surface">
       <FlatList
-        data={data.data}
+        data={data?.data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ChatItem chatData={item} onpress={() => handleChatPress(item)} />

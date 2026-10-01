@@ -63,21 +63,23 @@ export const chatController = {
         });
       }
 
-      let chat = await Chat.findOne({
-        participants: { $all: [userId, participantId] },
-      })
-        .populate("participants", "name email avatar")
-        .populate("lastMessage");
+     let chat = await Chat.findOne({
+      participants: { $all: [userId, participantId] },
+    })
+      .populate("participants", "name email avatar")
+      .populate("lastMessage");
 
-      if (!chat) {
-        const newChat = new Chat({ participantId: [userId, participantId] });
-        await newChat.save();
-        chat = await newChat.populate("participants", "name email avatar");
-      }
+    if (!chat) {
+      const newChat = new Chat({ participants: [userId, participantId] });
+      await newChat.save();
+      chat = await newChat.populate("participants", "name email avatar");
+    }
+      
 
       const otherParticipants = chat.participants.find(
         (p: any) => p._id.toString() !== userId,
       );
+      // console.log("chat back",otherParticipants)
       const result = {
         _id: chat._id,
         participant: otherParticipants ?? null,
