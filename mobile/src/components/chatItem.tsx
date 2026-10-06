@@ -1,8 +1,7 @@
-import { View, Text, Pressable } from "react-native";
-import React from "react";
 import { ChatlistModel } from "@/lib/types/chat.types";
-import { Image } from "expo-image";
 import { formatDistanceToNow } from "date-fns";
+import { Image } from "expo-image";
+import { Pressable, Text, View } from "react-native";
 
 type ChatItemType = {
   chatData: ChatlistModel;
@@ -17,7 +16,7 @@ const ChatItem = ({ chatData, onpress }: ChatItemType) => {
   const hasUnread = false;
   return (
     <Pressable
-      className="flex-row items-center py-3 active-opacity-70"
+      className="flex-row items-center py-3  active-opacity-70"
       onPress={onpress}
     >
       <View>
@@ -51,7 +50,7 @@ const ChatItem = ({ chatData, onpress }: ChatItemType) => {
             </Text>
           </View>
         </View>
-         <View className="flex-row items-center justify-between mt-1">
+        <View className="flex-row items-center justify-between mt-1">
           {isTyping ? (
             <Text className="text-sm text-primary italic">typing...</Text>
           ) : (

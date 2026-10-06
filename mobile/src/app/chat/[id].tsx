@@ -1,8 +1,17 @@
 import EmptyUI from "@/components/emptyUI";
+import { useGetMessage } from "@/lib/hooks/message.hooks";
+import { useCurrentUser } from "@/lib/hooks/useAuth";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
-import { KeyboardAvoidingView, Pressable, Text, View } from "react-native";
+import { useRef, useState } from "react";
+import {
+  KeyboardAvoidingView,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type ChatParams = {
@@ -19,8 +28,26 @@ const ChatDetailScreen = () => {
     name,
     participantId,
   } = useLocalSearchParams<ChatParams>();
+  const [messageText, setMessageText] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  const { data: currentUser } = useCurrentUser();
+  const { data: messageData, isLoading: messageLoading } =
+    useGetMessage(chatId);
+
   const isOnline = false;
   const isTyping = false;
+
+  // useEffect(() => {
+  //   if (messageData && messageData.length > 0) {
+  //     setTimeout(() => {
+  //       scrollViewRef.current?.scrollToEnd({ animated: true });
+  //     }, 100);
+  //   }
+  // }, [messageData]);
+
+  console.log("Message", messageData);
   return (
     <SafeAreaView className="flex-1" edges={["top", "bottom"]}>
       <View className="flex-row items-center px-4 py-2 bg-surface border-b border-surface-light">

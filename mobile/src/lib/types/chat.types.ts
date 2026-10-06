@@ -22,9 +22,16 @@ export interface ChatLastMessage {
 }
 
 export interface ChatlistModel {
+  id: string;
   _id: string;
   participant: MessageSender;
   lastMessage: ChatLastMessage | null;
   lastMessageAt: string;
   createdAt: string;
 }
+
+export type messageResponse = {
+  data: Message[];
+  success: boolean;
+  message: string;
+};

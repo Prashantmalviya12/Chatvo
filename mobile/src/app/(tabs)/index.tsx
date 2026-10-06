@@ -35,17 +35,19 @@ const ChatTabs = () => {
   }
 
   const handleChatPress = (chat: ChatlistModel) => {
-    console.log("chat--", chat);
-    // router.push({
-    //   pathname: "/chat/[id]",
-    //   params: {
-    //     id: chat._id,
-    //     // participantId: chat.participant,
-    //     name: chat.participant.name,
-    //     avatar: chat.participant.avatar,
-    //   },
-    // });
+    // console.log("chat--", chat);
+    router.push({
+      pathname: "/chat/[id]",
+      params: {
+        id: chat.id,
+        participantId: chat.participant._id,
+        name: chat.participant.name,
+        email: chat.participant.email,
+        avatar: chat.participant.avatar,
+      },
+    });
   };
+
   return (
     <View className="flex-1 bg-surface">
       <FlatList
