@@ -20,7 +20,7 @@ export const useCurrentUser = () => {
     queryKey: ["currentUser"],
     queryFn: async () => {
       const res = await apiclient.get("/api/auth/me");
-      console.log("user Detail", res.data);
+      // console.log("user Detail", res.data);
       return res.data;
     },
   });

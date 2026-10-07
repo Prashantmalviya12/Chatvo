@@ -16,9 +16,12 @@ export const messageController = {
         throw ApiError({ statusCode: 400, message: "Chat not found." });
       }
 
+      console.log("chat", chat);
+
       const message = await Message.find({ chat: chatId })
         .populate("sender", "name email avatar")
         .sort({ createdAt: 1 });
+      console.log("message", message);
 
       return res.status(200).json(
         ApiResponse({

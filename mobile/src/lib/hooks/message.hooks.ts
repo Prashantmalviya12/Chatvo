@@ -11,7 +11,7 @@ export const useGetMessage = (chatid: string) => {
         `/api/message/${chatid}`,
       );
       console.log("message Data", res.data);
-      return res.data;
+      return res.data.data;
     },
     enabled: !!chatid,
   });

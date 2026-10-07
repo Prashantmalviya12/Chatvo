@@ -73,6 +73,7 @@ export const chatController = {
       const newChat = new Chat({ participants: [userId, participantId] });
       await newChat.save();
       chat = await newChat.populate("participants", "name email avatar");
+      console.log("chat",chat)
     }
       
 

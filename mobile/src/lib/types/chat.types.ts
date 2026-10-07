@@ -9,14 +9,14 @@ export interface Message {
   _id: string;
   chat: string;
   sender: MessageSender | string;
-  text: string;
+  content: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface ChatLastMessage {
   _id: string;
-  text: string;
+  content: string;
   sender: string;
   createdAt: string;
 }

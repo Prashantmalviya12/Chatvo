@@ -41,6 +41,7 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     if (existingSocket) existingSocket.disconnect();
 
     const socket = io(SOCKET_URL, { auth: { token } });
+    // console.log("socket", socket);
 
     socket.on("connect", () => {
       console.log("Socket connected, id:", socket.id);
@@ -63,20 +64,23 @@ export const useSocketStore = create<SocketState>((set, get) => ({
       });
     });
     socket.on("socket-error", (error: { message: string }) => {
-      console.error("Socket error:", error.message);
+      console.log("Socket error:", error.message);
     });
 
     socket.on("new-message", (message: Message) => {
       const senderId = (message.sender as MessageSender)._id;
       const { currentChatId } = get();
 
-      queryClient.setQueryData<Message[]>(["messages", message.chat], (old) => {
-        if (!old) return [message];
+      queryClient.setQueryData<Message[]>(
+        ["getMessage", message.chat],
+        (old) => {
+          if (!old) return [message];
 
-        const filtered = old.filter((m) => m._id.startsWith("temp-"));
-        if (filtered.some((m) => m._id === message._id)) return filtered;
-        return [...filtered, message];
-      });
+          const filtered = old.filter((m) => m._id.startsWith("temp-"));
+          if (filtered.some((m) => m._id === message._id)) return filtered;
+          return [...filtered, message];
+        },
+      );
 
       queryClient.setQueryData<ChatlistModel[]>(["chats"], (oldChats) => {
         return oldChats?.map((chat) => {
@@ -85,7 +89,7 @@ export const useSocketStore = create<SocketState>((set, get) => ({
               ...chat,
               lastMessage: {
                 _id: message._id,
-                text: message.text,
+                content: message.content,
                 sender: senderId,
                 createdAt: message.createdAt,
               },
@@ -135,9 +139,79 @@ export const useSocketStore = create<SocketState>((set, get) => ({
 
     set({ socket, queryClient });
   },
-  disconnect: () => {},
-  joinChat: () => {},
-  leaveChat: () => {},
-  sendMessage: () => {},
-  sendTyping: () => {},
+  disconnect: () => {
+    const socket = get().socket;
+    if (socket) {
+      socket.disconnect();
+
+      set({
+        socket: null,
+        isConnected: false,
+        onlineUsers: new Set(),
+        typingUsers: new Map(),
+        unreadChats: new Set(),
+        currentChatId: null,
+        queryClient: null,
+      });
+    }
+  },
+  joinChat: (chatId) => {
+    const socket = get().socket;
+    set((state) => {
+      const unreadChats = new Set(state.unreadChats);
+      unreadChats.delete(chatId);
+      return { currentChatId: chatId, unreadChats: unreadChats };
+    });
+    if (socket?.connected) {
+      socket.emit("join-chat", chatId);
+    }
+  },
+  leaveChat: (chatId) => {
+    const { socket } = get();
+    set({ currentChatId: null });
+    if (socket?.connected) {
+      socket.emit("leave-chat", chatId);
+    }
+  },
+
+  sendMessage: (chatId, text, currentUser) => {
+    // console.log("socket send message", chatId, "-", text, "-", currentUser);
+    const { socket, queryClient } = get();
+    if (!socket?.connected || !queryClient) return;
+
+    const tempId = `temp-${Date.now()}`;
+    const optimisticMessage: Message = {
+      _id: tempId,
+      chat: chatId,
+      sender: currentUser,
+      content: text,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    console.log("optimisticMessage", optimisticMessage);
+
+    queryClient.setQueryData<Message[]>(["getMessage", chatId], (old) => {
+      console.log("olf ", old);
+      if (!old) {
+        return [optimisticMessage];
+      }
+      return [...old, optimisticMessage];
+    });
+
+    socket.emit("send-message", { chatId, text });
+
+    const errorHandle = (error: { message: string }) => {
+      queryClient.setQueryData<Message[]>(["getMessage", chatId], (old) => {
+        if (!old) return [];
+        return old.filter((m) => m._id !== tempId);
+      });
+    };
+    console.log("socket-error", errorHandle);
+  },
+  sendTyping: (chatId, isTyping) => {
+    const { socket } = get();
+    if (socket?.connected) {
+      socket.emit("typing", { chatId, isTyping });
+    }
+  },
 }));

@@ -6,6 +6,7 @@ type messageType = {
   isFromMe: boolean;
 };
 export default function MessageBubble({ message, isFromMe }: messageType) {
+  console.log("message sent", message);
   return (
     <View className={`flex-row ${isFromMe ? "justify-end" : "justify-start"}`}>
       <View
@@ -18,7 +19,7 @@ export default function MessageBubble({ message, isFromMe }: messageType) {
         <Text
           className={`text-sm ${isFromMe ? "text-surface-dark" : "text-foreground"}`}
         >
-          {message.text}
+          {message.content}
         </Text>
       </View>
     </View>

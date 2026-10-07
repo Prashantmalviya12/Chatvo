@@ -41,6 +41,7 @@ export const initiallizeSocket = (httpServer: HttpServer) => {
 
   io.on("connection", (socket) => {
     const userId = socket.data.userId;
+    // console.log("connection",userId)
 
     // send list of currently online users to the newly connected client
     socket.emit("online-users", { userIds: Array.from(onlineUser.keys()) });
