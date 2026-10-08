@@ -7,8 +7,8 @@ export interface MessageSender {
 
 export interface Message {
   _id: string;
-  chat: string;
-  sender: MessageSender | string;
+  chatId: string;
+  senderId: MessageSender | string;
   content: string;
   createdAt: string;
   updatedAt: string;

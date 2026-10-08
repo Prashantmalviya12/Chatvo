@@ -59,10 +59,10 @@ const NewChatScreen = () => {
         <View className="rounded-t-3xl h-[95%] overflow-hidden">
           <View className="px-5 pt-3 pb-3 border-b border-surface-light flex-row items-center">
             <Pressable
-              className="w-9 h-9 rounded-full items-center justify-center mr-2 bg-surface-card"
+              className="w-9 h-9 rounded-full items-center justify-center mr-2 bg-foreground"
               onPress={() => router.back()}
             >
-              <Ionicons name="close" size={20} color="#F4A261" />
+              <Ionicons name="close" size={20} color="#00b4d8" />
             </Pressable>
             <View className="flex-1">
               <Text className="text-forehead text-xl font-semibold">
@@ -75,12 +75,12 @@ const NewChatScreen = () => {
           </View>
 
           <View className="px-5 pt-3 pb-2 ">
-            <View className="flex-row items-start rounded-full px-3 py-1.5 gap-2 border ">
-              <Ionicons name="search" size={18} color="#6B6B70" />
+            <View className="flex-row items-start bg-surface  border-surface-light rounded-full px-3 py-1.5 gap-2 border ">
+              <Ionicons name="search" size={18} color="#fafaff" />
               <TextInput
                 placeholder="Search Users"
-                placeholderTextColor="#6B6B70"
-                className="flex-1 text-forehead text-sm"
+                placeholderTextColor="#fafaff"
+                className="flex-1  text-sm mb-2"
                 autoCapitalize="none"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
@@ -88,7 +88,7 @@ const NewChatScreen = () => {
             </View>
           </View>
 
-          <View className="flex-1 bg-surface">
+          <View className="flex-1">
             {isCreatingChatLoading || userLoading ? (
               <View className="flex-1 items-center justify-center">
                 <ActivityIndicator size="large" color="#F4A261" />
@@ -109,9 +109,7 @@ const NewChatScreen = () => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 24 }}
               >
-                <Text className="text-muted-foreground text-xs mb-3">
-                  USERS
-                </Text>
+                <Text className="text-surface-card text-xs mb-3">USERS</Text>
                 {users.map((user) => (
                   <UserItem
                     key={user._id}

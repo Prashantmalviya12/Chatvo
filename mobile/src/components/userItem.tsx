@@ -12,7 +12,7 @@ type UserItemProps = {
 function UserItem({ user, isOnline, onPress }: UserItemProps) {
   return (
     <Pressable
-      className="flex-row items-center py-2.5 active:opacity-70"
+      className="flex-row items-center py-2.5 active:opacity-70 bg-surface-light rounded-lg px-3"
       onPress={onPress}
     >
       <View className="relative">
@@ -27,7 +27,7 @@ function UserItem({ user, isOnline, onPress }: UserItemProps) {
 
       <View className="flex-1 ml-3 border-b border-surface-light pb-2">
         <View className="flex-row items-center justify-between">
-          <Text className="text-foreground font-medium" numberOfLines={1}>
+          <Text className="text-surface-card font-medium" numberOfLines={1}>
             {user.name}
           </Text>
           {isOnline && (

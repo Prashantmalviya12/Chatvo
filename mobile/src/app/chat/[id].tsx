@@ -43,7 +43,7 @@ const ChatDetailScreen = () => {
   const { data: messageData, isLoading: messageLoading } =
     useGetMessage(chatId);
 
-  console.log("message", messageData);
+  // console.log("message", messageData);
   const {
     joinChat,
     leaveChat,
@@ -68,7 +68,7 @@ const ChatDetailScreen = () => {
   }, [chatId, isConnected, joinChat, leaveChat]);
 
   useEffect(() => {
-    if (messageData && messageData.length > 0) {
+    if (messageData && messageData.data.length > 0) {
       setTimeout(() => {
         scrollViewRef.current?.scrollToEnd({ animated: true });
       }, 100);
@@ -128,13 +128,13 @@ const ChatDetailScreen = () => {
     }, 100);
   };
 
-  // console.log("Message", messageData);
+  console.log("Message", messageData);
 
   return (
     <SafeAreaView className="flex-1" edges={["top", "bottom"]}>
       <View className="flex-row items-center px-4 py-2 bg-surface border-b border-surface-light">
         <Pressable onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#F4A261" />
+          <Ionicons name="arrow-back" size={24} color="#caf0f8" />
         </Pressable>
         <View className="flex-row items-center flex-1 ml-2">
           {avatar && (
@@ -150,19 +150,17 @@ const ChatDetailScreen = () => {
             >
               {name}
             </Text>
-            <Text
-              className={`text-xs ${isTyping ? "text-primary" : "text-muted-foreground"}`}
-            >
+            <Text className={`text-xs text-foreground`}>
               {isTyping ? "typing..." : isOnline ? "Online" : "Offline"}
             </Text>
           </View>
         </View>
         <View className="flex-row items-center gap-3">
           <Pressable className="w-9 h-9 rounded-full items-center justify-center">
-            <Ionicons name="call-outline" size={20} color="#A0A0A5" />
+            <Ionicons name="call-outline" size={20} color="#caf0f8" />
           </Pressable>
           <Pressable className="w-9 h-9 rounded-full items-center justify-center">
-            <Ionicons name="videocam-outline" size={20} color="#A0A0A5" />
+            <Ionicons name="videocam-outline" size={20} color="#caf0f8" />
           </Pressable>
         </View>
       </View>
@@ -176,7 +174,7 @@ const ChatDetailScreen = () => {
             <View>
               <ActivityIndicator size="large" color="#00b4d8" />
             </View>
-          ) : messageData || messageData?.length === 0 ? (
+          ) : messageData?.data && messageData?.data?.length === 0 ? (
             <EmptyUI
               title="No Message yet"
               subtitle="Start the Conversation!"
@@ -186,11 +184,14 @@ const ChatDetailScreen = () => {
             />
           ) : (
             <ScrollView>
-              {messageData?.map((message, idx) => {
-                const senderId = (message.sender as MessageSender)._id;
+              {messageData?.data?.map((message, idx) => {
+                const senderId = (message.senderId as MessageSender)._id;
                 const isfromMe = currentUser
-                  ? senderId === currentUser._id
+                  ? senderId === currentUser.data._id
                   : false;
+                console.log("isfromMe", isfromMe);
+                console.log("currentUser", currentUser.data);
+
                 return (
                   <MessageBubble
                     key={message._id}
@@ -203,15 +204,15 @@ const ChatDetailScreen = () => {
           )}
 
           <View className="px-3 pb-3 pt-2 bg-surface border-t border-surface-light">
-            <View className="flex-row items-end bg-surface-card rounded-3xl px-3 py-1.5 gap-2">
+            <View className="flex-row items-end bg-surface-light rounded-3xl px-3 py-1.5 gap-2">
               <Pressable className="w-8 h-8 rounded-full items-center justify-center">
-                <Ionicons name="add" size={22} color="#F4A261" />
+                <Ionicons name="add" size={22} />
               </Pressable>
 
               <TextInput
                 placeholder="Type a message"
                 placeholderTextColor="#6B6B70"
-                className="flex-1 text-foreground text-sm mb-2"
+                className="flex-1  text-sm mb-2"
                 multiline
                 style={{ maxHeight: 100 }}
                 value={messageText}

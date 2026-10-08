@@ -10,18 +10,19 @@ export const messageController = {
     try {
       const userId = req.userId;
       const { chatId } = req.params;
+      // console.log("chat Id",chatId)
 
       const chat = await Chat.findOne({ _id: chatId, participants: userId });
       if (!chat) {
         throw ApiError({ statusCode: 400, message: "Chat not found." });
       }
 
-      console.log("chat", chat);
+      // console.log("chat", chat);
 
-      const message = await Message.find({ chat: chatId })
-        .populate("sender", "name email avatar")
+      const message = await Message.find({ chatId: chatId })
+        .populate("senderId", "name email avatar")
         .sort({ createdAt: 1 });
-      console.log("message", message);
+      // console.log("message", message);
 
       return res.status(200).json(
         ApiResponse({

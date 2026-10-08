@@ -16,7 +16,7 @@ const ChatItem = ({ chatData, onpress }: ChatItemType) => {
   const hasUnread = false;
   return (
     <Pressable
-      className="flex-row items-center py-3  active-opacity-70"
+      className="flex-row items-center py-3 px-3 bg-surface-light active-opacity-70"
       onPress={onpress}
     >
       <View>
@@ -25,14 +25,14 @@ const ChatItem = ({ chatData, onpress }: ChatItemType) => {
           style={{ width: 56, height: 56, borderRadius: 999 }}
         />
         {isOnline && (
-          <View className="absolute bottom-0 right-0 size-4 bg-green-500 rounded-full border-[3px] border-surface" />
+          <View className="absolute bottom-0 right-0 size-4 bg-green-500 rounded-full border-[3px] " />
         )}
       </View>
 
       <View className="flex-1 ml-4">
         <View className="flex-row items-center justify-between">
           <Text
-            className={`text-base font-medium ${hasUnread ? "text-primary" : "text-foreground"}`}
+            className={`text-base font-medium ${hasUnread ? "text-primary" : "text-black"}`}
           >
             {participant.name}
           </Text>
@@ -58,7 +58,7 @@ const ChatItem = ({ chatData, onpress }: ChatItemType) => {
               className={`text-sm flex-1 mr-3 ${hasUnread ? "text-foreground font-medium" : "text-subtle-foreground"}`}
               numberOfLines={1}
             >
-              {chatData.lastMessage?.text || "No messages yet"}
+              {chatData.lastMessage?.content || "No messages yet"}
             </Text>
           )}
         </View>

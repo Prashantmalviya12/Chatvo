@@ -24,7 +24,7 @@ const ChatTabs = () => {
         <Text className="text-red-500 text-3xl">Failed to load chats</Text>
         <Pressable
           onPress={() => refetch()}
-          className="bg-[##00b4d8] mt-4 px-4 py-2 bg-primary rounded-lg"
+          className=" mt-4 px-4 py-2 bg-primary rounded-lg"
         >
           <Text className="text-white">
             <Ionicons name="refresh" size={15} /> Retry
@@ -49,7 +49,7 @@ const ChatTabs = () => {
   };
 
   return (
-    <View className="flex-1 bg-surface">
+    <View className="flex-1 ">
       <FlatList
         data={data?.data}
         keyExtractor={(item) => item.id}
@@ -58,11 +58,7 @@ const ChatTabs = () => {
         )}
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-          paddingTop: 16,
-          paddingBottom: 24,
-        }}
+
         ListHeaderComponent={<Header />}
         ListEmptyComponent={
           <EmptyUI
@@ -85,15 +81,17 @@ function Header() {
   const router = useRouter();
 
   return (
-    <View className="px-5 pt-2 pb-4">
-      <View className="flex-row items-center justify-between">
-        <Text className="text-2xl font-bold text-foreground">Chats</Text>
-        <Pressable
-          className="size-10 bg-primary rounded-full items-center justify-center"
-          onPress={() => router.push("/new-chat")}
-        >
-          <Ionicons name="create-outline" size={20} color="#0D0D0F" />
-        </Pressable>
+    <View className="bg-surface">
+      <View className="px-5 pt-2 pb-4 ">
+        <View className="flex-row items-center justify-between">
+          <Text className="text-2xl font-bold text-foreground">Chats</Text>
+          <Pressable
+            className="size-10 bg-primary rounded-full items-center justify-center"
+            onPress={() => router.push("/new-chat")}
+          >
+            <Ionicons name="create-outline" size={20} color="#0D0D0F" />
+          </Pressable>
+        </View>
       </View>
     </View>
   );

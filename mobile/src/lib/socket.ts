@@ -1,7 +1,12 @@
 import { QueryClient } from "@tanstack/react-query";
 import { io, Socket } from "socket.io-client";
 import { create } from "zustand";
-import { ChatlistModel, Message, MessageSender } from "./types/chat.types";
+import {
+  ChatlistModel,
+  Message,
+  messageResponse,
+  MessageSender,
+} from "./types/chat.types";
 
 const SOCKET_URL = process.env.EXPO_PUBLIC_API_URL;
 interface SocketState {
@@ -68,11 +73,11 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     });
 
     socket.on("new-message", (message: Message) => {
-      const senderId = (message.sender as MessageSender)._id;
+      const senderId = (message.senderId as MessageSender)._id;
       const { currentChatId } = get();
 
       queryClient.setQueryData<Message[]>(
-        ["getMessage", message.chat],
+        ["getMessage", message.chatId],
         (old) => {
           if (!old) return [message];
 
@@ -84,7 +89,7 @@ export const useSocketStore = create<SocketState>((set, get) => ({
 
       queryClient.setQueryData<ChatlistModel[]>(["chats"], (oldChats) => {
         return oldChats?.map((chat) => {
-          if (chat._id === message.chat) {
+          if (chat._id === message.chatId) {
             return {
               ...chat,
               lastMessage: {
@@ -100,19 +105,19 @@ export const useSocketStore = create<SocketState>((set, get) => ({
         });
       });
 
-      if (currentChatId !== message.chat) {
+      if (currentChatId !== message.chatId) {
         const chats = queryClient.getQueryData<ChatlistModel[]>(["chats"]);
-        const chat = chats?.find((c) => c._id === message.chat);
+        const chat = chats?.find((c) => c._id === message.chatId);
         if (chat?.participant && senderId === chat.participant._id) {
           set((state) => ({
-            unreadChats: new Set([...state.unreadChats, message.chat]),
+            unreadChats: new Set([...state.unreadChats, message.chatId]),
           }));
         }
       }
 
       set((state) => {
         const typingUsers = new Map(state.typingUsers);
-        typingUsers.delete(message.chat);
+        typingUsers.delete(message.chatId);
         return { typingUsers: typingUsers };
       });
     });
@@ -182,20 +187,27 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     const tempId = `temp-${Date.now()}`;
     const optimisticMessage: Message = {
       _id: tempId,
-      chat: chatId,
-      sender: currentUser,
+      chatId: chatId,
+      senderId: currentUser,
       content: text,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
     console.log("optimisticMessage", optimisticMessage);
 
-    queryClient.setQueryData<Message[]>(["getMessage", chatId], (old) => {
-      console.log("olf ", old);
+    queryClient.setQueryData<messageResponse>(["getMessage", chatId], (old) => {
       if (!old) {
-        return [optimisticMessage];
+        return {
+          data: [optimisticMessage],
+          success: true,
+          message: "Get Message Successfully",
+        };
       }
-      return [...old, optimisticMessage];
+
+      return {
+        ...old,
+        data: [...old.data, optimisticMessage],
+      };
     });
 
     socket.emit("send-message", { chatId, text });

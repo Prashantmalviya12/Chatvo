@@ -10,8 +10,8 @@ export const useGetMessage = (chatid: string) => {
       const res = await apiclient.get<messageResponse>(
         `/api/message/${chatid}`,
       );
-      console.log("message Data", res.data);
-      return res.data.data;
+      // console.log("message Data", res.data);
+      return res.data;
     },
     enabled: !!chatid,
   });

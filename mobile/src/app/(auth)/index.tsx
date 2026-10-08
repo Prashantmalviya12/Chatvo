@@ -40,7 +40,7 @@ const Authscreen = () => {
         />
       </View>
       <View className="mt-4 items-center">
-        <Text className="text-2xl font-bold text-foreground text-center text-[#00b4d8]">
+        <Text className="text-2xl font-bold  text-center text-primary">
           Login with
         </Text>
       </View>
@@ -59,7 +59,9 @@ const Authscreen = () => {
               style={{ width: 20, height: 20 }}
               contentFit="contain"
             />
-            <Text className="text-gray-900 font-semibold text-sm">Google</Text>
+            <Text className="text-surface-light font-semibold text-sm">
+              Google
+            </Text>
           </>
         </Pressable>
 
@@ -73,7 +75,7 @@ const Authscreen = () => {
         >
           <>
             <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
-            <Text className="text-foreground font-semibold text-sm">Apple</Text>
+            <Text className="text-primary font-semibold text-sm">Apple</Text>
           </>
         </Pressable>
       </View>
