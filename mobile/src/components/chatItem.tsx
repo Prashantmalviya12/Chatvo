@@ -1,3 +1,4 @@
+import { useSocketStore } from "@/lib/socket";
 import { ChatlistModel } from "@/lib/types/chat.types";
 import { formatDistanceToNow } from "date-fns";
 import { Image } from "expo-image";
@@ -11,12 +12,14 @@ type ChatItemType = {
 const ChatItem = ({ chatData, onpress }: ChatItemType) => {
   const participant = chatData.participant;
 
-  const isOnline = true;
-  const isTyping = false;
-  const hasUnread = false;
+  const { onlineUsers, typingUsers, unreadChats } = useSocketStore();
+
+  const isOnline = onlineUsers.has(participant._id);
+  const isTyping = typingUsers.get(chatData._id) === participant._id;
+  const hasUnread = unreadChats.has(chatData._id);
   return (
     <Pressable
-      className="flex-row items-center py-3 px-3 bg-surface-light active-opacity-70"
+      className={`flex-row items-center py-3 px-3  active-opacity-70 ${hasUnread ? "bg-surface-light" : "border border-surface-light"}`}
       onPress={onpress}
     >
       <View>

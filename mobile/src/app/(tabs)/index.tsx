@@ -4,19 +4,25 @@ import { useGetChats } from "@/lib/hooks/useChat";
 import { ChatlistModel } from "@/lib/types/chat.types";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useRouter } from "expo-router";
-import { FlatList, Pressable, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 
 const ChatTabs = () => {
   const { data, isLoading, error, refetch } = useGetChats();
   // console.log("chat data", data.data);
 
-  // if (isLoading) {
-  //   return (
-  //     <View className="flex-1 bg-surface items-center justify-center">
-  //       <ActivityIndicator size={"large"} color={"#00b4d8"} />
-  //     </View>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <View className="flex-1 bg-surface items-center justify-center">
+        <ActivityIndicator size={"large"} color={"#00b4d8"} />
+      </View>
+    );
+  }
 
   if (error) {
     return (

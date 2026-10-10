@@ -131,7 +131,7 @@ const ChatDetailScreen = () => {
   console.log("Message", messageData);
 
   return (
-    <SafeAreaView className="flex-1" edges={["top", "bottom"]}>
+    <SafeAreaView className="flex-1" edges={["top"]}>
       <View className="flex-row items-center px-4 py-2 bg-surface border-b border-surface-light">
         <Pressable onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#caf0f8" />
@@ -203,7 +203,7 @@ const ChatDetailScreen = () => {
             </ScrollView>
           )}
 
-          <View className="px-3 pb-3 pt-2 bg-surface border-t border-surface-light">
+          <View className="px-3 pb-8 pt-4 bg-surface border-t border-surface-light">
             <View className="flex-row items-end bg-surface-light rounded-3xl px-3 py-1.5 gap-2">
               <Pressable className="w-8 h-8 rounded-full items-center justify-center">
                 <Ionicons name="add" size={22} />
