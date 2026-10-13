@@ -1,0 +1,31 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useApi from "../axios";
+import type { chatsResponse } from "../types/chat.types";
+
+export const useGetChats = () => {
+  const apiclient = useApi();
+  return useQuery({
+    queryKey: ["chats"],
+    queryFn: async () => {
+      const res = await apiclient.get<chatsResponse>("/api/getChats");
+      // console.log("Get chats list:", res.data);
+      return res.data;
+    },
+  });
+};
+
+export const useGetorCreateChat = () => {
+  const apiclient = useApi();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (participantId: string) => {
+      const res = await apiclient.post(`/api/getChat/${participantId}`);
+      // console.log("response chat create", res.data);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chats"] });
+    },
+  });
+};

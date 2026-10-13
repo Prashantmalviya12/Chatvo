@@ -128,7 +128,7 @@ const ChatDetailScreen = () => {
     }, 100);
   };
 
-  console.log("Message", messageData);
+  // console.log("Message", messageData);
 
   return (
     <SafeAreaView className="flex-1" edges={["top"]}>
