@@ -1,56 +1,62 @@
-import React, { useState } from 'react'
-import { useGetUsers } from '../lib/hooks/useUser';
-import { SearchIcon, UsersIcon } from 'lucide-react';
-import { useSocketStore } from '../lib/socket.io';
+import React, { useState } from "react";
+import { useGetUsers } from "../lib/hooks/useUser";
+import { SearchIcon, UsersIcon } from "lucide-react";
+import { useSocketStore } from "../lib/socket.io";
 
 type NewChatModelType = {
-    onStartChat:(participantId:string) => void
-    isPending:boolean
-    isOpen:boolean
-    onClose:() => void
-}
-export default function NewChatModel({ onStartChat, isPending, isOpen, onClose }:NewChatModelType) {
-
-     const [searchQuery, setSearchQuery] = useState("");
+  onStartChat: (participantId: string) => void;
+  isPending: boolean;
+  isOpen: boolean;
+  onClose: () => void;
+};
+export default function NewChatModel({
+  onStartChat,
+  isPending,
+  isOpen,
+  onClose,
+}: NewChatModelType) {
+  const [searchQuery, setSearchQuery] = useState("");
   const { onlineUsers } = useSocketStore();
   const { data: allUsers } = useGetUsers();
   // console.log("allluser",allUsers)
-  const isOnline = (id:string) => onlineUsers.has(id);
+  const isOnline = (id: string) => onlineUsers.has(id);
 
-  const handleStartChat = (participantId:string) => {
+  const handleStartChat = (participantId: string) => {
     onStartChat(participantId);
     setSearchQuery("");
     onClose();
   };
 
-
   const searchResults = allUsers?.data.filter((u) => {
     if (!searchQuery.trim()) return false;
     const query = searchQuery.toLowerCase();
-    return u.name?.toLowerCase().includes(query) || u.email?.toLowerCase().includes(query);
+    return (
+      u.name?.toLowerCase().includes(query) ||
+      u.email?.toLowerCase().includes(query)
+    );
   });
 
   return (
-   <dialog className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 ${isOpen ? "block" : "hidden"}`}>
-      <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
-        <h3 className="font-semibold flex items-center gap-2 mb-4">
+    <dialog className={`modal ${isOpen ? "modal-open" : ""}`}>
+      <div className="modal-box !p-4">
+        <h3 className="font-semibold flex items-center gap-2 !mb-4">
           <UsersIcon className="size-5 text-primary" />
           New Chat
         </h3>
-        <div className="relative mb-4">
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-base-content/60 z-10 pointer-events-none" />
+        <div className="relative !mb-4">
+          <SearchIcon className="absolute left-3 top-1/2 text-base-100 -translate-y-1/2 w-4 h-4 z-10 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search users by name or email..."
-            className="input input-bordered w-full pl-10"
+            className="bg-white text-base-100 w-full !py-2 !pl-10"
             autoFocus
           />
         </div>
         <div className="max-h-72 overflow-y-auto">
-          {searchResults?.length === 0 ? (
-            <div className="py-8 text-center text-base-content/60 text-sm">
+          {searchResults && searchResults.length === 0 ? (
+            <div className="!py-8 text-center text-base-content/60 text-sm">
               {searchQuery ? "No users found" : "Start typing to search"}
             </div>
           ) : (
@@ -80,7 +86,7 @@ export default function NewChatModel({ onStartChat, isPending, isOpen, onClose }
         <div className="modal-action">
           <form method="dialog">
             <button
-              className="btn"
+              className="bg-primary !px-2 rounded-lg"
               onClick={() => {
                 setSearchQuery("");
                 onClose();
@@ -95,5 +101,5 @@ export default function NewChatModel({ onStartChat, isPending, isOpen, onClose }
         <button>close</button>
       </form>
     </dialog>
-  )
+  );
 }

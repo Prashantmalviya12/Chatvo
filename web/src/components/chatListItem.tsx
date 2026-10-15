@@ -16,7 +16,7 @@ export default function ChatListItem({ chat, isActive, onClick }:ChatListItemTyp
   return (
     <button
       onClick={onClick}
-      className={`btn btn-ghost  flex justify-start gap-3 items-center !px-4 !py-2 rounded-xl w-full normal-case ${
+      className={`  flex justify-start gap-3 items-center !px-2 !py-2 rounded-xl w-full normal-case ${
         isActive ? "bg-white" : ""
       }`}
     >
@@ -27,15 +27,15 @@ export default function ChatListItem({ chat, isActive, onClick }:ChatListItemTyp
         )}
       </div>
       <div className="flex-1 text-left min-w-0">
-        <div className="flex items-center justify-between">
-          <span className="font-medium text-sm truncate">
+        <div className="flex items-center text-gray-700 justify-between">
+          <span className="font-medium text-sm ">
             {chat.participant?.name || "Unknown"}
           </span>
           {chat.lastMessageAt && (
             <span className="text-xs text-base-content/60">{formatTime(chat.lastMessageAt)}</span>
           )}
         </div>
-        <p className="text-xs text-base-content/70 truncate mt-0.5">
+        <p className="text-xs text-gray-400 !mt-0.5">
           {isTyping ? "typing..." : chat.lastMessage?.content || "No messages yet"}
         </p>
       </div>

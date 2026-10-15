@@ -10,19 +10,19 @@ type chatInputType = {
 
 export default function ChatInput({value,onChange,onSubmit,disabled}:chatInputType) {
   return (
-    <form onSubmit={onSubmit} className="p-4 border-t border-base-300">
+    <form onSubmit={onSubmit} className="!px-4 !py-2 bg-surface-light border-t border-base-300">
       <div className="flex items-center gap-3">
         <input
           type="text"
           value={value}
           onChange={onChange}
           placeholder="Type a message..."
-          className="input input-bordered !p-4 flex-1 rounded-xl bg-base-300/40 border-base-300 placeholder:text-base-content/60 focus:outline-none focus:ring-0 focus:border-transparent"
+          className=" !p-2 flex-1  border-b border-base-300 text-gray-800 focus:outline-none focus:ring-0 "
         />
         <button
           type="submit"
           disabled={disabled}
-          className="btn rounded-full bg-linear-to-r from-surface-light to-surface-light !p-2 border-none disabled:btn-disabled"
+          className="text-surface-light rounded-full bg-linear-to-r from-primary to-primary !p-2 border-none disabled:btn-disabled"
         >
           <SendIcon className="size-5" />
         </button>

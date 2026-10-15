@@ -14,12 +14,12 @@ export default function MessageBubble({ message, userId }:MessageBubble) {
 
 
   return (
-    <div className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
+    <div className={`flex  ${isMe ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-md !px-4 !py-2.5 rounded-2xl ${
+        className={`max-w-md !mt-0.5 !px-4 !py-2.5 rounded-2xl ${
           isMe
-            ? "bg-primary rounded-br-sm border border-surface-light"
-            : "bg-surface-card rounded-bl-sm border border-surface-light"
+            ? "bg-primary rounded-br-sm border  border-surface-light"
+            : "bg-surface-light rounded-bl-sm  text-gray-800"
         }`}
       >
         <p className="text-sm">{message.content}</p>
