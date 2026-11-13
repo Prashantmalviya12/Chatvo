@@ -7,6 +7,8 @@ import messageRoutes from "./routes/message.route.js"
 import userRoutes from "./routes/user.route.js"
 import { clerkMiddleware } from '@clerk/express'
 import cors from "cors"
+import SwaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger.js";
 
 
 
@@ -35,6 +37,8 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use("/api-docs",SwaggerUi.serve,SwaggerUi.setup(swaggerSpec))
 
 app.use(express.json())
 app.use(clerkMiddleware())

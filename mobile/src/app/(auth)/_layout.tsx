@@ -6,7 +6,7 @@ const AuthLayout = () => {
 
   if (!isLoaded) return null;
 
-  console.log("issigned in:", isSignedIn);
+  // console.log("issigned in:", isSignedIn);
 
   if (isSignedIn) return <Redirect href={"/(tabs)"} />;
 
